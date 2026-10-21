@@ -1,0 +1,57 @@
+---
+title: "Exploring Storms"
+author: "Your Name"
+format: html
+execute:
+  echo: false
+---
+
+```{r}
+#| label: setup
+#| message: false
+library(tidyverse)
+```
+
+```{r}
+storms |>
+  filter(status %in% c("tropical depression", "tropical storm", "hurricane")) |>
+  mutate(status = factor(status, levels = c("tropical depression", "tropical storm", "hurricane"))) |>
+  distinct(year, name, status) |>
+  count(year, status) |>
+  complete(year, status, fill = list(n = 0)) |>
+  ggplot(aes(x = year, y = n, fill = status)) +
+  geom_area() +
+  scale_fill_manual(
+    values = c(
+      "tropical depression" = "lightblue",
+      "tropical storm" = "orange",
+      "hurricane" = "darkred"
+    )
+  ) +
+  labs(
+    title = "Named Storms per Year by Storm Type",
+    x = "Year",
+    y = "Number of Storms",
+    fill = "Storm Type"
+  )
+```
+
+```{r}
+#| cache: true
+storms_recent <- storms |>
+  filter(year >= 2000) |>
+  select(year, name, status, wind, pressure)
+```
+
+```{r}
+storms_recent |>
+  ggplot(aes(x = pressure, y = wind, color = status)) +
+  geom_point(alpha = 0.4) +
+  labs(
+    title = "Storm Wind Speed vs. Air Pressure (2000–Present)",
+    subtitle = "Lower central air pressure is strongly associated with higher wind speeds",
+    x = "Air Pressure (millibars)",
+    y = "Maximum Sustained Wind Speed (knots)",
+    color = "Storm Status"
+  )
+```

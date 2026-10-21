@@ -1,0 +1,16 @@
+# R temporary and environment files
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.Renviron
+
+# Quarto rendered output and cache
+/.quarto/
+_site/
+*_files/
+*_cache/
+*.html
+
+# OS files
+.DS_Store
